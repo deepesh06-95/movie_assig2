@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-image: url("https://wallpaper.dog/large/20474347.jpg");
+            background-size: cover;
+            color: white;
+        }
+        img{
+            width:100%;
+            height: 400px;
+            margin-left: 0%;
+            margin-top: 5%;
+        }
+        #data{
+            display: grid;
+            grid-template-columns: 20% 30%;
+            grid-gap: 1%;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        h3{
+            color:orange;
+        }
+        h1{
+            margin-left: 40%;
+        }
+        input{
+            margin-left: 30%;
+            padding: 10px 100px;
+        }
+        button{
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search</h1>
+    <input type="text" id="name" placeholder="Movie Name"/>
+    <button onclick="getMovie()">Search Movie</button>
+    <div id="data"></div>
+</body>
+
+<script>
+
+let parent=document.getElementById("data");
+
+
+async function getMovie()
+    {
+        parent.innerHTML=null;
+
+        let name=document.getElementById("name").value;
+
+        let res=await fetch(`http://www.omdbapi.com/?t=${name}&apikey=e6bcaee0`);
+
+        
+ 
+        let data = await res.json();
+
+        console.log(data);
+
+        if(data.Response=="False")
+        {
+            showerr();
+        }
+
+        else{
+       showmovie_data(data);
+        }     
+   
+    }
+
+function showmovie_data(data)
+{
+let div=document.createElement("div");
+let img=document.createElement("img");
+let movie_title=document.createElement("h2");
+movie_title.textContent=data.Title;
+let imdbRating=document.createElement("h3");
+imdbRating.textContent="IMDB Rating : "+data.imdbRating;
+let Release=document.createElement("h3");
+Release.textContent="Release Date : "+data.Released;
+let Runtime=document.createElement("h3");
+Runtime.textContent="Runtime : "+data.Runtime;
+let Actors=document.createElement("h3");
+Actors.textContent="Cast : "+data.Actors;
+img.src=data.Poster;
+div.append(movie_title,imdbRating,Release,Runtime,Actors);
+parent.append(img,div);
+
+}
+
+function showerr()
+{
+let div=document.createElement("div");
+let img=document.createElement("img"); 
+img.style.width="700px";
+let x=document.createElement("h2");
+x.style.color="black";
+x.textContent="Movie Not Found";
+img.src="https://klizos.com/wp-content/uploads/funny-404-error-page-GIF.gif";
+div.append(x);
+parent.append(img,div);
+}
+
+
+</script>
+</html>
